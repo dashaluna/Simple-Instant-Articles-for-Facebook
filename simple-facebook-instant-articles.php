@@ -60,6 +60,10 @@ class Simple_FB_Instant_Articles {
 	 */
 	public function __construct( $file, $version ) {
 
+		if ( is_admin() ) {
+			$my_settings_page = new Simple_FB_Instant_Articles_Options();
+		}
+
 		add_action( 'init', array( $this, 'init' ) );
 		add_action( 'init', array( $this, 'add_feed' ) );
 		add_action( 'wp', array( $this, 'add_actions' ) );
