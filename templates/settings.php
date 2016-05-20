@@ -105,7 +105,10 @@ class Simple_FB_Instant_Articles_Options extends Simple_FB_Instant_Articles {
 	 * Print the Section text.
 	 */
 	public function print_section_info() {
-		printf( 'Hello! Welcome to Simple Instant Articles for Facebook. First things first, if you are wondering where to find the RSS feed, you can <a href="%s">find it here</a>. If you need to add your publisher ID to the head of the document, you can do that here:', esc_url( home_url( 'feed/' . apply_filters( 'simple_fb_feed_slug', 'fb' ) ) ) );
+		printf(
+			'Hello! Welcome to Simple Instant Articles for Facebook. First things first, if you are wondering where to find the RSS feed, you can <a href="%s">find it here</a>.',
+			esc_url( home_url( 'feed/' . apply_filters( 'simple_fb_feed_slug', 'fb' ) ) )
+		);
 	}
 
 	/**
@@ -116,8 +119,9 @@ class Simple_FB_Instant_Articles_Options extends Simple_FB_Instant_Articles {
 		$page_id_number = isset( $this->options['page_id_number'] ) ? $this->options['page_id_number'] : '';
 
 		printf(
-			'<input type="text" id="page_id_number" name="fb_instant[page_id_number]" value="%s" />',
-			esc_attr( $page_id_number )
+			'<input type="text" id="page_id_number" name="fb_instant[page_id_number]" value="%1$s" /><p class="description">%2$s</p>',
+			esc_attr( $page_id_number ),
+			esc_html( 'Specify your facebook publisher ID.' )
 		);
 	}
 
