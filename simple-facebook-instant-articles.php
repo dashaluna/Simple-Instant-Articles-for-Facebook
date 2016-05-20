@@ -102,9 +102,9 @@ class Simple_FB_Instant_Articles {
 	 * @return void
 	 */
 	public function add_publisher_id_to_head() {
-		$page_id = isset( $this->options['page_id_number'] ) ? esc_attr( $this->options['page_id_number']) : '';
+		$page_id = isset( $this->options['page_id_number'] ) ? $this->options['page_id_number'] : '';
 		if ( ! empty( $page_id ) ) {
-			printf( '<meta property="fb:pages" content="%s" />', $page_id );
+			printf( '<meta property="fb:pages" content="%s" />', esc_attr( $page_id ) );
 		}
 	}
 
