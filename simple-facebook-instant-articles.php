@@ -23,7 +23,6 @@ class Simple_FB_Instant_Articles {
 	 */
 	private $token = 'fb';
 
-
 	/**
 	 * Image Size - 2048x2048 recommended resolution.
 	 * @see https://developers.facebook.com/docs/instant-articles/reference/image
@@ -61,7 +60,7 @@ class Simple_FB_Instant_Articles {
 	public function __construct( $file, $version ) {
 
 		if ( is_admin() ) {
-			$my_settings_page = new Simple_FB_Instant_Articles_Options();
+			$admin_page = new Simple_FB_Instant_Articles_Options();
 		}
 
 		add_action( 'init', array( $this, 'init' ) );
@@ -69,7 +68,7 @@ class Simple_FB_Instant_Articles {
 		add_action( 'wp', array( $this, 'add_actions' ) );
 		add_action( 'wp_loaded', array( $this, 'flush_rules' ) );
 		add_action( 'pre_get_posts', array( $this, 'customise_feed_query' ) );
-		add_action( 'wp_head', array( $this, 'add_publisher_id_to_head' ) );
+		add_action( 'wp_head', array( $this, 'add_fb_settings_to_article' ) );
 
 		// Render post content into FB IA format.
 		add_action( 'simple_fb_pre_render', array( $this, 'setup_content_mods' ) );
@@ -82,7 +81,6 @@ class Simple_FB_Instant_Articles {
 		$this->template_path = trailingslashit( $this->dir ) . 'templates/';
 		$this->home_url      = trailingslashit( home_url() );
 		$this->endpoint      = apply_filters( 'simple_fb_article_endpoint', 'fb-instant' );
-		$this->options       = get_option( 'fb_instant' );
 	}
 
 	/**
@@ -99,15 +97,18 @@ class Simple_FB_Instant_Articles {
 	}
 
 	/**
-	 * Facebook wants the published ID added to the head of the document. For larger
-	 * publishers, this is likely already done, but let's provide an option for those
-	 * that haven't added it.
+	 * Add facebook settings to the <head> element of the FB IA.
 	 *
 	 * @return void
 	 */
-	public function add_publisher_id_to_head() {
-		$page_id = isset( $this->options['page_id_number'] ) ? $this->options['page_id_number'] : '';
-		if ( ! empty( $page_id ) ) {
+	public function add_fb_settings_to_article() {
+
+		$options = get_option( 'fb_instant' );
+
+		// Add facebook publisher ID.
+		$page_id = isset( $options['page_id_number'] ) ? $options['page_id_number'] : '';
+
+		if ( $page_id ) {
 			printf( '<meta property="fb:pages" content="%s" />', esc_attr( $page_id ) );
 		}
 	}
